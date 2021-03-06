@@ -21,18 +21,17 @@ class Options(Scene):
     def onBackClick(self):
         self.game.changeScene("MainMenu")
 
+    def eventHandle(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                print(event)
+                for element in self.guiElements:
+                    if element[0].handleHover():
+                        if element[1]: eval(element[1])
+
     def onRender(self):
         for lab in self.guiElements:
             lab[0].onRender(self.game.screen)
 
-
     def onTick(self):
-        self.game.clickCooldown -= 1
-        if self.game.clickCooldown > 0:
-            return
-        for lab, callback in self.guiElements:
-            if(lab.handleHover()):
-                if pygame.mouse.get_pressed()[0]:
-                    if callback:
-                        eval(callback)
-                        self.game.clickCooldown = 10
+        pass

@@ -8,8 +8,5 @@ class Image(GuiElement):
         image = pygame.image.load(image)
         self.image = pygame.transform.scale(image, self.size)
 
-    def onTick(self):
-        pass
-
     def onRender(self, screen):
         screen.blit(self.image, (self.position + self.size))

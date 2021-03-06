@@ -36,9 +36,6 @@ class Label(GuiElement):
             self.position[1] + self.size[1] > mousePosition[1]
         )
 
-    def onTick(self):
-        pass
-
     def getBackground(self):
         if not self.background[1]:
             return self.background[0]
