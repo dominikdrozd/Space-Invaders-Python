@@ -7,6 +7,9 @@ class Player(GameObject):
         super().__init__(game, position, size, texture, collision)
         self.moveLeft = False
         self.moveRight = False
+        self.health = 6
+        self.points = 0
+        self.money = 0
         self.fire = False
         self.onFire = pygame.mixer.Sound("Assets/shot.mp3")
         self.shotCooldown = 0
@@ -23,7 +26,7 @@ class Player(GameObject):
             self.onFire.play()
             bulletX = self.position[0] + self.size[0] / 2 - 2
             bulletY = self.position[1] + 2
-            self.game.scene.createBullet((bulletX, bulletY))
+            self.game.scene.createBullet((bulletX, bulletY), -1, ["Alien"])
         if self.shotCooldown > 0: self.shotCooldown -= 1
         return
 

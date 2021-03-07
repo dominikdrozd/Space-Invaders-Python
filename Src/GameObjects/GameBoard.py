@@ -14,7 +14,7 @@ class GameBoard(GameObject):
     def onRender(self, surface: pygame.Surface):
         x, y = self.position
         width, height = self.size
-
+        surface.blit(self.objectTexture, self.position)
         pygame.draw.line(surface, (125, 125, 125), (x, y), (x + width, y))
         pygame.draw.line(surface, (125, 125, 125), (x, y), (x, y + height))
         pygame.draw.line(surface, (125, 125, 125), (x + width, y), (x + width, y + height))

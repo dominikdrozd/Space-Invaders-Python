@@ -8,5 +8,9 @@ class Image(GuiElement):
         image = pygame.image.load(image)
         self.image = pygame.transform.scale(image, self.size)
 
+    def changeImage(self, image):
+        image = pygame.image.load(image)
+        self.image = pygame.transform.scale(image, self.size)
+
     def onRender(self, screen):
         screen.blit(self.image, (self.position + self.size))
