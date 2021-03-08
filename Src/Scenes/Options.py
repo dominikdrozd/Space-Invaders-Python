@@ -12,7 +12,7 @@ class Options(Scene):
         self.offset = 0
         self.perPage = 21
         self.guiElements = [
-            [Label((self.gameWidth / 2 - 250 / 2, 10), (250, 55), "Ranking", (15, 15), (0, 0, 0), None, 54, (255, 255, 255), None, True), None],
+            [Label((0, 0), (self.gameWidth, 65), "Ranking", (15, 15), (0, 0, 0), None, 54, (255, 255, 255), None, True), None],
             [Label((10, self.gameHeight - 60), (250, 50), "Powrót", (15, 15), (0, 0, 0), (255, 255, 255), 15, (255, 255, 255), (85, 0, 0), True), "self.onBackClick()"]
         ]
         self.resultsGui = []
@@ -33,11 +33,11 @@ class Options(Scene):
             for i in range(len(self.results)):
                 if i % 2:
                     self.resultsGui.append(
-                        Label((50 / 2, 80 + (i % self.perPage) * 20), (750, 20), "{0}. {1} - {2}".format(i+1, str(self.results[i][0]), int(self.results[i][1])), (0, 0), (255, 255, 255), (255, 255, 255), 15, (0, 0, 0), (85, 15, 15), False)
+                        Label((50 / 2, 80 + (i % self.perPage) * 20), (750, 20), "{0}. {1} ({2})".format(i+1, str(self.results[i][0]), int(self.results[i][1])), (0, 0), (255, 255, 255), (255, 255, 255), 15, (0, 0, 0), (85, 15, 15), False)
                     )
                 else:
                     self.resultsGui.append(
-                        Label((50 / 2, 80 + (i % self.perPage) * 20), (750, 20), "{0}. {1} - {2}".format(i+1, str(self.results[i][0]), int(self.results[i][1])), (0, 0), (0, 0, 0), (255, 255, 255), 15, (255, 255, 255), (85, 15, 15), False)   
+                        Label((50 / 2, 80 + (i % self.perPage) * 20), (750, 20), "{0}. {1} ({2})".format(i+1, str(self.results[i][0]), int(self.results[i][1])), (0, 0), (0, 0, 0), (255, 255, 255), 15, (255, 255, 255), (85, 15, 15), False)   
                     )                    
         except(Exception):
             pass
@@ -64,8 +64,11 @@ class Options(Scene):
     def onRender(self):
         for lab in self.guiElements:
             lab[0].onRender(self.game.screen)
-        for i in range(self.perPage):
-            self.resultsGui[i+self.offset].onRender(self.game.screen)
-
+        try:
+            for i in range(self.perPage):
+                self.resultsGui[i+self.offset].onRender(self.game.screen)
+        except(Exception):
+            pass
+        
     def onTick(self):
         pass

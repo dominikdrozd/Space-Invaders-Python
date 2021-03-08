@@ -11,11 +11,11 @@ class EndGame(Scene):
         self.results = []
         self.gameWidth, self.gameHeight = self.game.windowSize
         self.guiElements = [
-            [Label((260, self.gameHeight - 60), (280, 55), "", (15, 15), (0, 0, 0), (255, 255, 255), 15, (255, 255, 255), (25, 25, 25), True), None],
-            [Label((self.gameWidth / 2 - 250 / 2, 10), (250, 55), "Koniec Gry", (15, 15), (0, 0, 0), None, 54, (255, 255, 255), None, True), None],
-            [Label((self.gameWidth / 2 - 250 / 2, 120), (250, 55), "Punkty: {0}".format(self.player.points), (15, 15), (255, 255, 255), None, 32, None, None, True), None],  
-            [Label((self.gameWidth / 2 - 250 / 2, 160), (250, 55), "Poziom: {0}".format(self.player.level), (15, 15), (255, 255, 255), None, 32, None, None, True), None],    
-            [Label((self.gameWidth / 2 - 250 / 2, 220), (250, 55), "Top 10", (15, 15), (0, 0, 0), None, 54, (255, 255, 255), None, True), None],                   
+            [Label((260, self.gameHeight - 60), (280, 55), "", (15, 15), (255, 255, 255), None, 15, (25, 25, 25), None, True), None],
+            [Label((260, self.gameHeight - 95), (280, 25), "Pseudonim:", (5, 12), (255, 255, 255), (255, 255, 255), 15, None, None, False), None],
+            [Label((0, 0), (self.gameWidth, 65), "Koniec Gry", (15, 15), (0, 0, 0), None, 54, (255, 255, 255), None, True), None],
+            [Label((self.gameWidth / 2 - 250 / 2, 120), (250, 55), "Punkty: {0}".format(self.player.points), (0, 0), (255, 255, 255), None, 22, None, None, True), None],     
+            [Label((0, 180), (self.gameWidth, 60), "Top 10", (15, 15), (0, 0, 0), None, 54, (255, 255, 255), None, True), None],                   
             [Label((self.gameWidth - 255, self.gameHeight - 60), (250, 55), "Zapisz Wynik", (15, 15), (0, 0, 0), (255, 255, 255), 15, (255, 255, 255), (25, 25, 25), True), "self.onSaveClick()"],
             [Label((5, self.gameHeight - 60), (250, 55), "Wyjdź", (15, 15), (0, 0, 0), (255, 255, 255), 15, (255, 255, 255), (25, 25, 25), True), "self.onBackClick()"]
         ]
@@ -25,11 +25,18 @@ class EndGame(Scene):
         #self.addResult()
 
     def getRecord(self):
+        if len(self.results) <= 0:
+            return
+
         self.results.sort(key = lambda x: x[1])
+        
+        if self.player.points > int(self.results[0][1]):
+            self.guiElements.append([Label((0, 65), (self.gameWidth, 50), "NOWY REKORD", (15, 15), (255, 255, 255), None, 22, (85, 0, 0), None, True), None])
+
         try:
             for i in range(10):
                 self.guiElements.append(
-                    [Label((self.gameWidth / 2 - 350 / 2, 280 + i * 20), (350, 55), "{0}. {1} {2}".format(i, str(self.results[i][0]), int(self.results[i][1])), (15, 15), (255, 255, 255), None, 15, None, None, False), None],
+                    [Label((self.gameWidth / 2 - 350 / 2, 240 + i * 20), (350, 55), "{0}. {1} {2}".format(i, str(self.results[i][0]), int(self.results[i][1])), (15, 15), (255, 255, 255), None, 15, None, None, False), None],
                 )
         except(Exception):
             pass
