@@ -12,7 +12,7 @@ class Alien(GameObject):
     def onTick(self):
         rng = random.randrange(1000)
         if rng < 1:
-            self.game.scene.createBullet(self.position, 1, ["Player"])
+            self.game.scene.createBullet(self.position, (0, 1), ["Player"], 2)
         if self.game.scene.player.isCollided(self):
             self.onDestroy()
             self.game.scene.player.onHit(1)

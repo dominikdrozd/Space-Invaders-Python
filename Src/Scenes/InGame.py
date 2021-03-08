@@ -44,8 +44,8 @@ class InGame(Scene):
         y = self.boardPosY + offset[1]
         return (x, y)
 
-    def createBullet(self, position, side, targets):
-        bullet = Bullet(self.game, position, (4, 8), "Assets/coin.png", True, side, targets)
+    def createBullet(self, position, side, targets, speed):
+        bullet = Bullet(self.game, position, (4, 8), speed, "Assets/coin.png", True, side, targets)
         self.gameObjects.append(bullet)
         return True
 
@@ -82,13 +82,17 @@ class InGame(Scene):
             if event.key == pygame.K_a:
                 if not self.player.moveLeft: 
                     self.player.moveLeft = True
-            elif event.key == pygame.K_d:
+            if event.key == pygame.K_d:
                 if not self.player.moveRight: 
                     self.player.moveRight = True
-            elif event.key == pygame.K_SPACE:
-                    self.player.fire = True
-            elif event.key == pygame.K_b:
-                    self.player.onHit(999)
+            if event.key == pygame.K_SPACE:
+                self.player.fire = True
+            if event.key == pygame.K_b:
+                self.player.onHit(999)
+            if event.key == pygame.K_e:
+                self.player.weapon.upgradeWeapon()
+            if event.key == pygame.K_q:
+                self.player.weapon.degradeWeapon()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 self.player.moveLeft = False

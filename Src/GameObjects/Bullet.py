@@ -4,12 +4,12 @@ import pygame
 
 class Bullet(GameObject):
 
-    def __init__(self, game, position: tuple, size: tuple, texture: str, collision: bool, side, collisionWith):
+    def __init__(self, game, position: tuple, size: tuple, speed: float, texture: str, collision: bool, side: tuple, collisionWith):
         super().__init__(game, position, size, texture, collision)
         self.side = side
         self.bulletSound = pygame.mixer.Sound("Assets/explosion.mp3")
         self.collisionWith = collisionWith
-        self.speed = 8
+        self.speed = speed
 
     def onTick(self):
         try:
@@ -21,9 +21,15 @@ class Bullet(GameObject):
                     self.game.scene.player.points += 1
                     self.onDestroy()
                     alien.onDestroy()
-            if self.position[1] <= 32 + 8: self.onDestroy(True)
-            if self.position[1] > 600 - 48: self.onDestroy(True)
-            self.move((0, self.speed * self.side))
+            if self.position[1] <= 32 + 8:
+                self.onDestroy(True)
+            if self.position[1] > 600 - 48:
+                self.onDestroy(True)
+            if self.position[0] < self.game.scene.boardPosX + 10:
+                self.onDestroy(True)
+            if self.position[0] > self.game.scene.boardPosX + self.game.scene.boardWidth - 10:
+                self.onDestroy(True)
+            self.move((self.speed * self.side[0], self.speed * self.side[1]))
         except(Exception):
             pass
 
