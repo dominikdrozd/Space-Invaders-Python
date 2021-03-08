@@ -12,17 +12,20 @@ class Bullet(GameObject):
         self.speed = 8
 
     def onTick(self):
-        if "Player" in self.collisionWith and self.isCollided(self.game.scene.player):
-            self.onDestroy()
-            self.game.scene.player.health -= 1
-        for alien in self.game.scene.gameObjects:
-            if self.isCollided(alien) and alien.__class__.__name__ in self.collisionWith:
-                self.game.scene.player.points += 1
+        try:
+            if "Player" in self.collisionWith and self.isCollided(self.game.scene.player):
                 self.onDestroy()
-                alien.onDestroy()
-        if self.position[1] <= 32 + 8: self.onDestroy(True)
-        if self.position[1] > 600 - 48: self.onDestroy(True)
-        self.move((0, self.speed * self.side))
+                self.game.scene.player.onHit(1)
+            for alien in self.game.scene.gameObjects:
+                if self.isCollided(alien) and alien.__class__.__name__ in self.collisionWith:
+                    self.game.scene.player.points += 1
+                    self.onDestroy()
+                    alien.onDestroy()
+            if self.position[1] <= 32 + 8: self.onDestroy(True)
+            if self.position[1] > 600 - 48: self.onDestroy(True)
+            self.move((0, self.speed * self.side))
+        except(Exception):
+            pass
 
     def onRender(self, surface: pygame.Surface):
         surface.blit(self.objectTexture, self.position)

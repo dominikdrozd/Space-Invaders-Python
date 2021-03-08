@@ -16,7 +16,7 @@ class InGame(Scene):
         self.boardPosY = 32
         self.boardWidth = gameWidth - 288
         self.boardHeight = gameHeight - 64
-        self.player = Player(self.game, (gameWidth / 2 + self.boardPosX / 2, gameHeight - 64), (32, 32), "Assets/alien1.png", True)
+        self.player = Player(self.game, (gameWidth / 2 + self.boardPosX / 2, gameHeight - 70), (32, 32), "Assets/ship.png", True)
         self.board = GameBoard(self.game, (self.boardPosX, self.boardPosY), (self.boardWidth, self.boardHeight), "Assets/map.png", True)
         self.guiElements = [
             Image((32, 32), (32, 32), "Assets/health-full.png"),
@@ -77,6 +77,17 @@ class InGame(Scene):
         if destroyedObject in self.gameObjects: 
             self.gameObjects.remove(destroyedObject)
 
+    def refreshAliens(self):
+        aliens = [alien for alien in self.gameObjects if isinstance(alien, Alien)]
+        bullets = [bullet for bullet in self.gameObjects if isinstance(bullet, Bullet)]
+        if len(aliens) <= 0:
+            for bullet in bullets:
+                bullet.onDestroy()
+            for j in range(5):
+                for i in range(10):
+                    alien = Alien(self.game, self.calculateMapPosition((32 + i * 32, 32 + 2 * j * 32)), (32, 32), "Assets/alien1.png", True)
+                    self.gameObjects.append(alien)
+
     def updateHud(self):
         for i in range(0,6):
             if i < self.player.health:
@@ -96,6 +107,8 @@ class InGame(Scene):
                     self.player.moveRight = True
             elif event.key == pygame.K_SPACE:
                     self.player.fire = True
+            elif event.key == pygame.K_b:
+                    self.player.onHit(999)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 self.player.moveLeft = False
@@ -115,6 +128,7 @@ class InGame(Scene):
 
     def onTick(self):
         if self.game.paused: return
+        self.refreshAliens()
         self.updateHud()
         self.board.onTick()
         self.player.onTick()

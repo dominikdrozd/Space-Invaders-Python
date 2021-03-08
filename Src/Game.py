@@ -1,11 +1,10 @@
 from Src.Scenes.MainMenu import MainMenu
 from Src.Scenes.Options import Options
 from Src.Scenes.InGame import InGame
+from Src.Scenes.EndGame import EndGame
 import pygame
 
 class Game(object):
-
-    __instance = None
 
     def __init__(self):
         pygame.init()
@@ -20,12 +19,18 @@ class Game(object):
 
     def changeScene(self, scene):
         if scene == "Options":
+            self.paused = True
             self.scene = Options(self)
         elif scene == "MainMenu":
+            self.paused = True
             self.scene = MainMenu(self)
         elif scene == "InGame":
             self.paused = False
             self.scene = InGame(self)
+        elif scene == "EndGame":
+            self.paused = True
+            player = self.scene.player
+            self.scene = EndGame(self, player)
 
     def quit(self):
         self.inGame = False

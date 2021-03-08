@@ -15,7 +15,7 @@ class Alien(GameObject):
             self.game.scene.createBullet(self.position, 1, ["Player"])
         if self.game.scene.player.isCollided(self):
             self.onDestroy()
-            self.game.scene.player.health -= 1
+            self.game.scene.player.onHit(1)
             return
         x = self.position[0] + self.speed * self.side
         if x > 800 - 64:
