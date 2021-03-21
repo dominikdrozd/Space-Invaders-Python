@@ -10,7 +10,7 @@ class Options(Scene):
         self.gameWidth, self.gameHeight = self.game.windowSize
         self.results = []
         self.offset = 0
-        self.perPage = 21
+        self.perPage = 22
         self.guiElements = [
             [Label((0, 0), (self.gameWidth, 65), "Ranking", (15, 15), (0, 0, 0), None, 54, (255, 255, 255), None, True), None],
             [Label((10, self.gameHeight - 60), (250, 50), "Powrót", (15, 15), (0, 0, 0), (255, 255, 255), 15, (255, 255, 255), (85, 0, 0), True), "self.onBackClick()"]
@@ -48,7 +48,6 @@ class Options(Scene):
     def eventHandle(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                print(event)
                 for element in self.guiElements:
                     if element[0].handleHover():
                         if element[1]: eval(element[1])
@@ -57,7 +56,7 @@ class Options(Scene):
                     return
                 self.offset -= 1
             if event.button == 5:
-                if(self.offset + self.perPage >= len(self.resultsGui)):
+                if(self.offset * self.perPage + self.perPage >= len(self.resultsGui)):
                     return
                 self.offset += 1
 
@@ -65,7 +64,8 @@ class Options(Scene):
         for lab in self.guiElements:
             lab[0].onRender(self.game.screen)
         try:
-            for i in range(self.perPage):
+            for i in range(self.offset * self.perPage - self.offset, self.offset * self.perPage + self.perPage):
+                print(i)
                 self.resultsGui[i+self.offset].onRender(self.game.screen)
         except(Exception):
             pass

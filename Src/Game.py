@@ -13,6 +13,7 @@ class Game(object):
         self.title = "Space Invaders"
         self.clock = pygame.time.Clock()
         self.paused = True
+        self.pauseTime = 0
         self.version = 0.1
         self.scene = MainMenu(self)
         pygame.display.set_caption(self.title)
@@ -49,4 +50,3 @@ class Game(object):
             self.scene.onTick()
             self.scene.onRender()
             pygame.display.update()
-            

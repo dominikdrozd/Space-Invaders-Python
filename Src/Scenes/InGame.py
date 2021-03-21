@@ -18,6 +18,7 @@ class InGame(Scene):
         self.boardHeight = gameHeight - 64
         self.player = Player(self.game, (gameWidth / 2 + self.boardPosX / 2, gameHeight - 70), (32, 32), "Assets/ship.png", True)
         self.board = GameBoard(self.game, (self.boardPosX, self.boardPosY), (self.boardWidth, self.boardHeight), "Assets/map.png", True)
+        self.levelFinished = Label((0, 228), (800, 65), "Poziom Ukończony!", (15, 15), (0, 0, 0), None, 54, (255, 255, 255), None, True)
         self.guiElements = [
             Image((32, 32), (32, 32), "Assets/health-full.png"),
             Image((64, 32), (32, 32), "Assets/health-full.png"),
@@ -36,32 +37,7 @@ class InGame(Scene):
             Label((32, 256 + 36), (192, 32), "D - Prawo", (5, 0), (255, 255, 255), None, 14, None, None, False),
             Label((32, 256 + 54), (192, 32), "SPACJA - Strzał", (5, 0), (255, 255, 255), None, 14, None, None, False),
         ]
-        self.gameObjects = [
-            Alien(self.game, self.calculateMapPosition((64, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((96, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((128, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((160, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((192, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((224, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((256, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((288, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((320, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((352, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((384, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((416, 32)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((64, 96)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((96, 96)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((128, 96)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((160, 96)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((192, 96)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((224, 96)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((256, 96)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((288, 96)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((320, 96)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((352, 96)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((384, 96)), (32, 32), "Assets/alien1.png", True),
-            Alien(self.game, self.calculateMapPosition((416, 96)), (32, 32), "Assets/alien1.png", True),
-        ]
+        self.gameObjects = []
 
     def calculateMapPosition(self, offset):
         x = self.boardPosX + offset[0]
@@ -81,6 +57,9 @@ class InGame(Scene):
         aliens = [alien for alien in self.gameObjects if isinstance(alien, Alien)]
         bullets = [bullet for bullet in self.gameObjects if isinstance(bullet, Bullet)]
         if len(aliens) <= 0:
+            self.game.paused = True
+            self.game.pauseTime = 60
+            self.player.level += 1
             for bullet in bullets:
                 bullet.onDestroy()
             for j in range(5):
@@ -96,6 +75,7 @@ class InGame(Scene):
                 self.guiElements[i].changeImage("Assets/health-empty.png")
         self.guiElements[7].text = str(self.player.money)
         self.guiElements[8].text = "Punkty: " + str(self.player.points)
+        self.guiElements[9].text = "Poziom: " + str(self.player.level)
 
     def eventHandle(self, event):
         if event.type == pygame.KEYDOWN:
@@ -125,9 +105,13 @@ class InGame(Scene):
             gameObject.onRender(self.game.screen)
         for element in self.guiElements:
             element.onRender(self.game.screen)
+        if self.game.pauseTime > 0:
+            self.levelFinished.onRender(self.game.screen)
 
     def onTick(self):
-        if self.game.paused: return
+        if self.game.pauseTime > 0: 
+            self.game.pauseTime -= 1
+            return
         self.refreshAliens()
         self.updateHud()
         self.board.onTick()

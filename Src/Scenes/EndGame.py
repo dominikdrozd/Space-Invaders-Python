@@ -20,23 +20,20 @@ class EndGame(Scene):
             [Label((5, self.gameHeight - 60), (250, 55), "Wyjdź", (15, 15), (0, 0, 0), (255, 255, 255), 15, (255, 255, 255), (25, 25, 25), True), "self.onBackClick()"]
         ]
         self.loadRecords()
-        print(self.results)
+        #print(self.results)
         self.getRecord()
         #self.addResult()
 
     def getRecord(self):
         if len(self.results) <= 0:
             return
-
-        self.results.sort(key = lambda x: x[1])
-        
+        self.results.sort(key = lambda x: int(x[1]), reverse=True)
         if self.player.points > int(self.results[0][1]):
             self.guiElements.append([Label((0, 65), (self.gameWidth, 50), "NOWY REKORD", (15, 15), (255, 255, 255), None, 22, (85, 0, 0), None, True), None])
-
         try:
             for i in range(10):
                 self.guiElements.append(
-                    [Label((self.gameWidth / 2 - 350 / 2, 240 + i * 20), (350, 55), "{0}. {1} {2}".format(i, str(self.results[i][0]), int(self.results[i][1])), (15, 15), (255, 255, 255), None, 15, None, None, False), None],
+                    [Label((self.gameWidth / 2 - 350 / 2, 240 + i * 20), (350, 55), "{0}. {1} {2}".format(i+1, str(self.results[i][0]), int(self.results[i][1])), (15, 15), (255, 255, 255), None, 15, None, None, False), None],
                 )
         except(Exception):
             pass
@@ -98,7 +95,6 @@ class EndGame(Scene):
                     self.guiElements[0][0].text = self.guiElements[0][0].text + buttons[event.key] 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                print(event)
                 for element in self.guiElements:
                     if element[0].handleHover():
                         if element[1]: eval(element[1])

@@ -38,7 +38,6 @@ class MainMenu(Scene):
     def eventHandle(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                print(event)
                 for element in self.guiElements:
                     if element[0].handleHover():
                         if element[1]: eval(element[1])
