@@ -5,6 +5,13 @@ from Src.GameObjects.Player import Player
 from Src.GameObjects.GameBoard import GameBoard
 from Src.GameObjects.Bullet import Bullet
 from Src.GameObjects.Alien import Alien
+from Src.GameObjects.Pickup import Pickup
+from Src.GameObjects.HealthPickup import HealthPickup
+from Src.GameObjects.WeaponUpgradePickup import WeaponUpgradePickup
+from Src.GameObjects.WeaponSpeedUpgradePickup import WeaponSpeedUpgradePickup
+from Src.GameObjects.WeaponDegradePickup import WeaponDegradePickup
+from Src.GameObjects.WeaponSpeedDegradePickup import WeaponSpeedDegradePickup
+import random
 import pygame
 
 class InGame(Scene):
@@ -28,10 +35,10 @@ class InGame(Scene):
             Image((192, 32), (32, 32), "Assets/health-empty.png"),
             Image((32, 64 + 8), (32, 32), "Assets/coin.png"),
             Label((64, 64 + 8), (128, 32), "0", (5, 0), (255, 255, 255), None, 27, None, None, False),
-            Label((32, 96 + 16), (192, 32), "Punkty: 0", (5, 0), (255, 255, 255), None, 14, None, None, False),
-            Label((32, 128), (192, 32), "Poziom: 1", (5, 0), (255, 255, 255), None, 14, None, None, False),
-            Label((32, gameHeight - 64), (192, 32), "Broń: Podstawowa", (5, 0), (255, 255, 255), None, 14, None, None, False),
-            Label((32, gameHeight - 46), (192, 32), "Amunicja: -1", (5, 0), (255, 255, 255), None, 14, None, None, False),
+            Label((32, 96 + 16), (192, 32), "Punkty", (5, 0), (255, 255, 255), None, 14, None, None, False),
+            Label((32, 128), (192, 32), "Poziom", (5, 0), (255, 255, 255), None, 14, None, None, False),
+            Label((32, 160 + 16), (192, 32), "Ulepszenie", (5, 0), (255, 255, 255), None, 14, None, None, False),
+            Label((32, 192), (192, 32), "SzybkoStrzelnosc", (5, 0), (255, 255, 255), None, 14, None, None, False),
             Label((32, 256 - 8), (192, 32), "Sterowanie", (5, 0), (255, 255, 255), None, 22, None, None, False),
             Label((32, 256 + 18), (192, 32), "A - Lewo", (5, 0), (255, 255, 255), None, 14, None, None, False),
             Label((32, 256 + 36), (192, 32), "D - Prawo", (5, 0), (255, 255, 255), None, 14, None, None, False),
@@ -47,6 +54,29 @@ class InGame(Scene):
     def createBullet(self, position, side, targets, speed):
         bullet = Bullet(self.game, position, (4, 8), speed, "Assets/coin.png", True, side, targets)
         self.gameObjects.append(bullet)
+        return True
+
+    def createPickup(self, position, speed):
+        rng = random.randrange(1000)
+        print(rng)
+        if rng<=10:
+            print("Health")
+            pickup = HealthPickup(self.game, position, (16, 16), speed, True)
+        elif rng<=20:
+            print("WUP")
+            pickup = WeaponUpgradePickup(self.game, position, (16, 16), speed, True)
+        elif rng<=30:
+            print("WSPEEDUP")
+            pickup = WeaponSpeedUpgradePickup(self.game, position, (16, 16), speed, True)
+        elif rng<=40:
+            print("WDOWN")
+            pickup = WeaponDegradePickup(self.game, position, (16, 16), speed, True)
+        elif rng<=50:
+            print("WSPEEDDOWN")
+            pickup = WeaponSpeedDegradePickup(self.game, position, (16, 16), speed, True)
+        else:
+            return
+        self.gameObjects.append(pickup)
         return True
 
     def destroyObject(self, destroyedObject):
@@ -76,6 +106,8 @@ class InGame(Scene):
         self.guiElements[7].text = str(self.player.money)
         self.guiElements[8].text = "Punkty: " + str(self.player.points)
         self.guiElements[9].text = "Poziom: " + str(self.player.level)
+        self.guiElements[10].text = "Ulepszenie Broni: " + str(self.player.weapon.upgrade_bullets)
+        self.guiElements[11].text = "Szybkostrzelnosc: " + str(self.player.weapon.speed_ratio)
 
     def eventHandle(self, event):
         if event.type == pygame.KEYDOWN:

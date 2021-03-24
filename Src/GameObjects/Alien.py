@@ -4,6 +4,9 @@ import random
 
 class Alien(GameObject):
 
+    speed: int
+    side: int
+
     def __init__(self, game, position: tuple, size: tuple, texture: str, collision: bool):
         super().__init__(game, position, size, texture, collision)
         self.speed = 4
@@ -29,7 +32,8 @@ class Alien(GameObject):
         self.position = (x, y)
 
     def onRender(self, surface: pygame.Surface):
-        surface.blit(self.objectTexture, self.position)
+        surface.blit(self.object_texture, self.position)
     
     def onDestroy(self):
         self.game.scene.destroyObject(self)
+        self.game.scene.createPickup(self.position, 2)

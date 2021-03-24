@@ -12,8 +12,8 @@ class GameObject(object):
         self.position = position
         self.size = size
         self.texture = texture
-        self.objectTexture = pygame.image.load(self.texture)
-        self.objectTexture = pygame.transform.scale(self.objectTexture, size)
+        object_texture = pygame.image.load(self.texture)
+        self.object_texture = pygame.transform.scale(object_texture, size)
         self.collision = collision
 
     def move(self, pos):

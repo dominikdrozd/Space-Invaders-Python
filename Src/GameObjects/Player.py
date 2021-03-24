@@ -19,6 +19,10 @@ class Player(GameObject):
         self.shotCooldown = 0
         self.speed = 8
 
+    def addHealth(self, value):
+        if self.health >= 6: return
+        self.health += value
+
     def onHit(self, damage):
         self.health -= damage
         if self.health <= 0:
@@ -37,7 +41,7 @@ class Player(GameObject):
         return
 
     def onRender(self, surface: pygame.Surface):
-        surface.blit(self.objectTexture, self.position)
+        surface.blit(self.object_texture, self.position)
     
     def onDestroy(self):
         pass

@@ -4,20 +4,25 @@ import pygame
 
 class Bullet(GameObject):
 
-    def __init__(self, game, position: tuple, size: tuple, speed: float, texture: str, collision: bool, side: tuple, collisionWith):
+    side: int
+    on_hit_sound: pygame.mixer.Sound
+    speed: float
+
+
+    def __init__(self, game, position: tuple, size: tuple, speed: float, texture: str, collision: bool, side: tuple, collision_with):
         super().__init__(game, position, size, texture, collision)
         self.side = side
-        self.bulletSound = pygame.mixer.Sound("Assets/explosion.mp3")
-        self.collisionWith = collisionWith
+        self.on_hit_sound = pygame.mixer.Sound("Assets/explosion.mp3")
+        self.collision_with = collision_with
         self.speed = speed
 
     def onTick(self):
         try:
-            if "Player" in self.collisionWith and self.isCollided(self.game.scene.player):
+            if "Player" in self.collision_with and self.isCollided(self.game.scene.player):
                 self.onDestroy()
                 self.game.scene.player.onHit(1)
             for alien in self.game.scene.gameObjects:
-                if self.isCollided(alien) and alien.__class__.__name__ in self.collisionWith:
+                if self.isCollided(alien) and alien.__class__.__name__ in self.collision_with:
                     self.game.scene.player.points += 1
                     self.onDestroy()
                     alien.onDestroy()
@@ -34,10 +39,10 @@ class Bullet(GameObject):
             pass
 
     def onRender(self, surface: pygame.Surface):
-        surface.blit(self.objectTexture, self.position)
+        surface.blit(self.object_texture, self.position)
     
     def onDestroy(self, muted=False):
         if not muted:
-            self.bulletSound.set_volume(0.1)
-            self.bulletSound.play()
+            self.on_hit_sound.set_volume(0.1)
+            self.on_hit_sound.play()
         self.game.scene.destroyObject(self)

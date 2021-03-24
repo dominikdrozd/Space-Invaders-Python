@@ -23,6 +23,14 @@ class BasicWeapon(Weapon):
     def degradeWeapon(self):
         if self.upgrade_bullets <= 1: return
         self.upgrade_bullets -= 1
+
+    def upgradeWeaponSpeed(self):
+        if self.speed_ratio <= 5: return
+        self.speed_ratio -= 2
+
+    def degradeWeaponSpeed(self):
+        if self.speed_ratio >= 30: return
+        self.speed_ratio += 2
         
     def onShot(self, player):
         if not self.canShot(): return
