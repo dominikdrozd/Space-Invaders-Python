@@ -1,8 +1,9 @@
 # Space-Invaders-Python
 
 # RUN
-To run the game you have to install pygame module by simple `pip install pygame`.\
-and after that simple `py main.py`.
+To run application neccesary is pygame library for python. \
+To install pygame: `pip install pygame`.\
+To start app use command `py main.py`.
 
 # TODO
 [ ] Refactor gameobjects containers.\
